@@ -10,7 +10,7 @@ struct S_Item {
     SupplyChain.ItemStateChange _state;
 }
 
-mapping(uint => S_Item) item;
+mapping(uint => S_Item) public item;
 
 uint itemIndex;
 
@@ -21,12 +21,15 @@ function createOrder(string memory _identifier, uint _itemPrice) public{
     itemIndex++;
 }
 
-function payforItem() public {
-
+function payforItem(uint _itemIndex) public payable {
+    require(item[itemIndex]._itemPrice == msg.value, "Only full payments are accepted!");
+    require(item[itemIndex]._state == ItemStateChange.Created, "We have an issue processing this request, your item might be further in the chain");
+    item[itemIndex]._state = ItemStateChange.Paid;
 }
 
-function deliverItem() public {
-
+function deliverItem(uint _itemIndex) public {
+    require(item[itemIndex]._state == ItemStateChange.Paid, "We have an issue processing this request, please ensure your item has been paid for");
+    item[itemIndex]._state = ItemStateChange.Delivered;
 }
 
 }
