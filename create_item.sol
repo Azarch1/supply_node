@@ -4,6 +4,7 @@ contract SupplyChain {
 
 enum ItemStateChange {Created,Paid,Delivered}
 
+// Struct used in combination with a variable for the uint to make a mapping
 struct S_Item {
     string _identifier;
     uint _itemPrice;
@@ -18,6 +19,7 @@ event SupplyChainStep(address indexed _from, address _to, string _identifier, ui
 
 event SupplyPaymentandDelivery(address indexed _from, address _to, uint indexed itemIndex);
 
+// Creates the the item leveraging the S_Item struct defined earlier
 function createOrder(string memory _identifier, uint _itemPrice) public{
     item[itemIndex]._identifier = _identifier;
     item[itemIndex]._itemPrice = _itemPrice;
@@ -26,6 +28,7 @@ function createOrder(string memory _identifier, uint _itemPrice) public{
     emit SupplyChainStep(msg.sender,address(this), _identifier, _itemPrice);
 }
 
+// Ensures that only an item that has been created can be paid for as well as updates the state to paid after the transaction
 function payforItem(uint _itemIndex, uint _payment) public payable {
     require(item[_itemIndex]._state == ItemStateChange.Created, "We have an issue processing this request, your item might be further in the chain");
     require(item[_itemIndex]._itemPrice == _payment, "Only full payments are accepted!");
