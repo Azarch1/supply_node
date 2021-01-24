@@ -11,6 +11,7 @@ struct S_Item {
     SupplyChain.ItemStateChange _state;
 }
 
+// Mapping used to couple each itemIndex with it's respective struct
 mapping(uint => S_Item) public item;
 
 uint itemIndex;
@@ -36,6 +37,7 @@ function payforItem(uint _itemIndex, uint _payment) public payable {
     emit SupplyPaymentandDelivery(msg.sender,address(this), _itemIndex);
 }
 
+// Changes the state of the item from paid to delivered in the work flow.
 function deliverItem(uint _itemIndex) public {
     require(item[_itemIndex]._state == ItemStateChange.Paid, "We have an issue processing this request, please ensure your item has been paid for");
     item[_itemIndex]._state = ItemStateChange.Delivered;
