@@ -7,12 +7,14 @@ contract Item {
     
     SupplyChain parentContract;
     
+    // These variables are populated upon the initialization of this item specific smart contract
     constructor(SupplyChain _parentContract, uint _priceInWei, uint _index) {
         priceInWei = _priceInWei;
         index = _index;
         parentContract = _parentContract;
     }
     
+    // This receive function handles accepting and routing the funds back to the main smart contract
     receive() external payable {
         require(pricePaid == 0, "This item has already been paid for");
         require(priceInWei == msg.value, "Only full payments allowed");
@@ -45,7 +47,7 @@ uint itemIndex;
 
 event SupplyChainStep(address indexed _from, address _to, string _identifier, uint _itemPrice, address itemAddress);
 
-event SupplyPaymentandDelivery(address indexed _from, address _to, uint indexed itemIndex, address itemAddress);
+event SupplyPaymentandDelivery(address indexed _from, address _to, uint indexed itemIndex);
 
 // Creates the the item leveraging the S_Item struct defined earlier
 function createOrder(string memory _identifier, uint _itemPrice) public{
@@ -58,12 +60,12 @@ function createOrder(string memory _identifier, uint _itemPrice) public{
     emit SupplyChainStep(msg.sender,address(this), _identifier, _itemPrice, address(item));
 }
 
-// Ensures that only an item that has been created can be paid for as well as updates the state to paid after the transaction
+// Ensures that only an item that has been created can be paid for as well as updates the state to "paid" after the transaction
 function payforItem(uint itemIndex) public payable {
     require(items[itemIndex]._state == ItemStateChange.Created, "We have an issue processing this request, your item might be further in the chain");
     require(items[itemIndex]._itemPrice == msg.value, "Only full payments are accepted!");
     items[itemIndex]._state = ItemStateChange.Paid;
-    emit SupplyPaymentandDelivery(msg.sender,address(this), itemIndex, address items[itemIndex]._item);
+    emit SupplyPaymentandDelivery(msg.sender,address(this), itemIndex);
 }
 
 // Changes the state of the item from paid to delivered in the work flow.
