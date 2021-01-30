@@ -9,6 +9,7 @@ contract Item {
     
     SupplyChain parentContract;
     
+    // Constructor variables that are populated during each contract instance
     constructor(SupplyChain _parentContract, uint _priceInWei, uint _index) {
         priceInWei = _priceInWei;
         index = _index;
