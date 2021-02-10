@@ -16,6 +16,7 @@ contract Item {
         parentContract = _parentContract;
     }
     
+    // Receive function that must be paired with fallback function in order for it to work as of 0.6.0
     receive() external payable {
         require(pricePaid == 0, "This item has already been paid for");
         require(priceInWei == msg.value, "Only full payments allowed");
