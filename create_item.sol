@@ -2,6 +2,7 @@ pragma solidity ^0.7.4;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 
+// contract to be paired with item creation
 contract Item {
     uint public priceInWei;
     uint public index;
