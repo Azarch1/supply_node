@@ -77,7 +77,7 @@ function deliverItem(uint itemIndex) public onlyOwner{
     items[itemIndex]._state = ItemStateChange.Delivered;
     emit SupplyPaymentandDelivery(msg.sender,address(this), itemIndex, address(items[itemIndex]._item));
 }
-
+// Allows the owner to withdraw a specified amount from this smart contract that is equal to or less than the balance
 function withdrawFunds(address payable _to, uint _amount) public onlyOwner{
     require(_amount <= address(this).balance, "There are not enough funds available");
     _to.transfer(_amount);
